@@ -1,0 +1,169 @@
+[tool.poetry]
+name = "drugbank-importer"
+version = "0.1.0"
+description = ""
+authors = ["Aurélien Grosdidier <aurelien.grosdidier@gmail.com>"]
+readme = "README.md"
+packages = [{include = "src/drugbank_importer"}]
+
+[tool.poetry.dependencies]
+pydantic = "^1.10.2"
+python = "^3.10"
+lxml = "^4.9.2"
+sqlalchemy = "2.0.0b4"
+click = "^8.1.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^4.0.0"
+coverage = {extras = ["toml"], version = "^7.0.0"}
+nox = "^2022.11.21"
+pre-commit = "^2.20.0"
+black = "^22.12.0"
+blacken-docs = "^1.12.1"
+flake8 = "^6.0.0"
+isort = "^5.11.3"
+pyright = "^1.1.284"
+commitizen = "^2.38.0"
+ipdb = "^0.13.11"
+pytest = "^7.2.0"
+pyinstrument = "^4.4.0"
+
+
+[tool.poetry.scripts]
+drugbank-import= 'drugbank_importer.drugbank_importer:cli'
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+
+[tool.pylint.messages_control]
+max-line-length = "88"
+disable = [
+  "apply-builtin",
+  "backtick",
+  "bad-inline-option",
+  "bad-python3-import",
+  "basestring-builtin",
+  "buffer-builtin",
+  "cmp-builtin",
+  "cmp-method",
+  "coerce-builtin",
+  "coerce-method",
+  "comprehension-escape",
+  "delslice-method",
+  "deprecated-itertools-function",
+  "deprecated-operator-function",
+  "deprecated-pragma",
+  "deprecated-str-translate-call",
+  "deprecated-string-function",
+  "deprecated-sys-function",
+  "deprecated-types-field",
+  "deprecated-urllib-function",
+  "dict-items-not-iterating",
+  "dict-iter-method",
+  "dict-keys-not-iterating",
+  "dict-values-not-iterating",
+  "dict-view-method",
+  "div-method",
+  "eq-without-hash",
+  "exception-escape",
+  "exception-message-attribute",
+  "execfile-builtin",
+  "file-builtin",
+  "file-ignored",
+  "filter-builtin-not-iterating",
+  "getslice-method",
+  "hex-method",
+  "idiv-method",
+  "import-star-module-level",
+  "indexing-exception",
+  "input-builtin",
+  "intern-builtin",
+  "invalid-str-codec",
+  "locally-disabled",
+  "long-builtin",
+  "long-suffix",
+  "map-builtin-not-iterating",
+  "metaclass-assignment",
+  "next-method-called",
+  "next-method-defined",
+  "no-absolute-import",
+  "non-ascii-bytes-literal",
+  "nonzero-method",
+  "oct-method",
+  "old-division",
+  "old-ne-operator",
+  "old-octal-literal",
+  "old-raise-syntax",
+  "parameter-unpacking",
+  "print-statement",
+  "raising-string",
+  "range-builtin-not-iterating",
+  "raw-checker-failed",
+  "raw_input-builtin",
+  "rdiv-method",
+  "reduce-builtin",
+  "reload-builtin",
+  "round-builtin",
+  "setslice-method",
+  "standarderror-builtin",
+  "suppressed-message",
+  "sys-max-int",
+  "unichr-builtin",
+  "unicode-builtin",
+  "unpacking-in-except",
+  "use-symbolic-message-instead",
+  "useless-suppression",
+  "using-cmp-argument",
+  "xrange-builtin",
+  "xreadlines-attribute",
+  "zip-builtin-not-iterating",
+  "C0114", # missing-module-docstring
+  "C0115", # missing-class-docstring
+  "C0116", # missing-function-docstring
+  "C0326", # bad-whitespace (for psf/black)
+  "C0330", # bad-continuation (for psf/black)
+  "E0401", # import-error
+  "R0903", # too-few-public-methods (e.g. for pydantic models)
+]
+
+[tool.bandit]
+targets = ["src"]
+skips = []
+
+[tool.pyright]
+exclude = [
+    "**/__pycache__",
+    ".git",
+    ".nox"
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-s"
+markers = [
+  "short",
+  "long",
+]
+
+[tool.coverage.run]
+branch = true
+command_line = '-m pytest'
+source = ['src/']
+
+[tool.coverage.report]
+precision = 2
+skip_covered = true
+fail_under = 90
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "1.2.1"
+version_files = [
+    "pyproject.toml:^version",
+    "src/drugbank_importer/__init__.py:^version"
+]
+bump_message = "chore(release): $current_version → $new_version"

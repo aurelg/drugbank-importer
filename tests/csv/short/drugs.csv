@@ -1,0 +1,51 @@
+drugbank_id,drugname,drug_type,ATC_codes,approved,experimental,illicit,investigational,nutraceutical,withdrawn
+DB00001,Lepirudin,biotech,True,True,False,False,False,False,False
+DB00002,Cetuximab,biotech,True,True,False,False,False,False,False
+DB00003,Dornase alfa,biotech,True,True,False,False,False,False,False
+DB00004,Denileukin diftitox,biotech,True,True,False,False,True,False,False
+DB00005,Etanercept,biotech,True,True,False,False,True,False,False
+DB00006,Bivalirudin,small molecule,True,True,False,False,True,False,False
+DB00007,Leuprolide,small molecule,True,True,False,False,True,False,False
+DB00008,Peginterferon alfa-2a,biotech,True,True,False,False,True,False,False
+DB00009,Alteplase,biotech,True,True,False,False,False,False,False
+DB00010,Sermorelin,biotech,True,True,False,False,False,False,True
+DB00011,Interferon alfa-n1,biotech,True,True,False,False,True,False,False
+DB00012,Darbepoetin alfa,biotech,True,True,False,False,True,False,False
+DB00013,Urokinase,biotech,True,True,False,False,True,False,True
+DB00014,Goserelin,small molecule,True,True,False,False,False,False,False
+DB00015,Reteplase,biotech,True,True,False,False,True,False,False
+DB00016,Erythropoietin,biotech,True,True,False,False,False,False,False
+DB00017,Salmon calcitonin,biotech,True,True,False,False,True,False,False
+DB00018,Interferon alfa-n3,biotech,False,True,False,False,True,False,False
+DB00019,Pegfilgrastim,biotech,True,True,False,False,False,False,False
+DB00020,Sargramostim,biotech,True,True,False,False,True,False,False
+DB00022,Peginterferon alfa-2b,biotech,True,True,False,False,False,False,False
+DB00023,Asparaginase Escherichia coli,biotech,True,True,False,False,True,False,False
+DB00024,Thyrotropin alfa,biotech,True,True,False,False,False,False,False
+DB00025,"Antihemophilic factor, human recombinant",biotech,True,True,False,False,True,False,False
+DB00026,Anakinra,biotech,True,True,False,False,False,False,False
+DB00027,Gramicidin D,small molecule,True,True,False,False,False,False,False
+DB00028,Human immunoglobulin G,biotech,False,True,False,False,True,False,False
+DB00029,Anistreplase,biotech,True,True,False,False,False,False,False
+DB00030,Insulin human,biotech,True,True,False,False,True,False,False
+DB00031,Tenecteplase,biotech,True,True,False,False,False,False,False
+DB00032,Menotropins,biotech,True,True,False,False,False,False,False
+DB00033,Interferon gamma-1b,biotech,False,True,False,False,True,False,False
+DB00034,Interferon alfa-2a,biotech,True,True,False,False,True,False,False
+DB00035,Desmopressin,small molecule,True,True,False,False,False,False,False
+DB00036,Coagulation factor VIIa Recombinant Human,biotech,True,True,False,False,False,False,False
+DB00038,Oprelvekin,biotech,True,True,False,False,True,False,False
+DB00039,Palifermin,biotech,True,True,False,False,False,False,False
+DB00040,Glucagon,biotech,True,True,False,False,False,False,False
+DB00041,Aldesleukin,biotech,True,True,False,False,False,False,False
+DB00042,Botulinum toxin type B,biotech,True,True,False,False,True,False,False
+DB00043,Omalizumab,biotech,True,True,False,False,True,False,False
+DB00044,Lutropin alfa,biotech,True,True,False,False,False,False,False
+DB00045,Lyme disease vaccine (recombinant OspA),biotech,False,True,False,False,False,False,True
+DB00046,Insulin lispro,biotech,True,True,False,False,False,False,False
+DB00047,Insulin glargine,biotech,True,True,False,False,False,False,False
+DB00048,Collagenase clostridium histolyticum,biotech,True,True,False,False,True,False,False
+DB00049,Rasburicase,biotech,True,True,False,False,True,False,False
+DB00050,Cetrorelix,small molecule,True,True,False,False,True,False,False
+DB00051,Adalimumab,biotech,True,True,True,False,False,False,False
+DB00052,Somatotropin,biotech,True,True,False,False,True,False,False

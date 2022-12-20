@@ -1,0 +1,178 @@
+---
+default_stages: [commit]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-xml
+      - id: check-toml
+      - id: check-yaml
+        args: ["--unsafe"]
+      # - id: debug-statements  # imported
+      - id: end-of-file-fixer
+        exclude: "mkdocs/licenses.md"
+        files: \.(conf|env|ini|json|md|py|rst|sh|toml|txt|yaml|yml)$
+      - id: pretty-format-json
+        args: ["--autofix", "--no-sort-keys"]
+      - id: trailing-whitespace
+        args: ["--markdown-linebreak-ext=md"]
+        files: \.(conf|env|ini|json|md|py|rst|sh|toml|txt|yaml|yml)$
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+        exclude: .*\.csv
+        # "auto", "lf" to enforce lin/mac, "crlf" for Win
+        # - id: requirements-txt-fixer  # Unnecessary:poetry export is sorted
+
+  - repo: local
+    hooks:
+      - id: update-requirements-txt
+        name: update-requirements-txt
+        description: "Generate requirements.txt based on poetry.lock"
+        entry: poetry
+        args:
+          [
+            export,
+            --format,
+            requirements.txt,
+            --output,
+            requirements.txt,
+            --without-hashes,
+          ]
+        language: system
+        pass_filenames: false
+      - id: update-dev-requirements-txt
+        name: update-dev-requirements-txt
+        description: "Generate requirements.txt based on poetry.lock"
+        entry: poetry
+        args:
+          [
+            export,
+            --format,
+            requirements.txt,
+            --output,
+            requirements-dev.txt,
+            --without-hashes,
+            --with,
+            dev,
+          ]
+        language: system
+        pass_filenames: false
+
+      - id: check_licenses
+        name: check_licenses
+        entry: bash -c 'pip-licenses --with-system --allow-only="Apache Software License;BSD License;BSD-3-Clause;CC0 1.0 Universal (CC0 1.0) Public Domain Dedication;GNU Lesser General Public License v2 (LGPLv2);Historical Permission Notice and Disclaimer (HPND);MIT License;Mozilla Public License 2.0 (MPL 2.0);Public Domain;Python Software Foundation License" --format=markdown --output-file=mkdocs/licenses.md --packages $( grep -E "^[a-zA-Z]" requirements.txt | sed -e "s/=.*$//g" | grep -vE "^dng-|^chemaxon-")'
+        language: system
+        files: "requirements.txt"
+        pass_filenames: false
+
+  - repo: https://github.com/pycqa/isort
+    rev: v5.11.3
+    hooks:
+      - id: isort
+        args: ["--profile", "black", "--filter-files"]
+
+  - repo: https://github.com/psf/black
+    rev: 22.12.0
+    hooks:
+      - id: black
+        language_version: python3
+
+  - repo: https://github.com/asottile/blacken-docs
+    rev: v1.12.1
+    hooks:
+      - id: blacken-docs
+        additional_dependencies: [black]
+
+  - repo: https://github.com/syntaqx/git-hooks
+    rev: v0.0.17
+    hooks:
+      - id: shellcheck
+      - id: shfmt
+
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.1-beta
+    hooks:
+      - id: hadolint
+        exclude: .*\.j2
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.32.2
+    hooks:
+      - id: markdownlint
+        args: ["--fix"]
+        exclude: "CHANGELOG.md|mkdocs/licenses.md"
+
+  # Type checking with pyright
+  # https://github.com/microsoft/pyright/blob/main/docs/ci-integration.md
+  #
+  - repo: local
+    hooks:
+      - id: pyright
+        name: pyright
+        entry: pyright
+        language: node
+        pass_filenames: false
+        types: [python]
+        # Replace the version below with the latest pyright version
+        additional_dependencies: ["pyright@1.1.217"]
+
+  # # Type checking with mypy
+  # #
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v0.931
+  #   hooks:
+  #     - id: mypy
+  #       args: [
+  #         "src/**/*.py",
+  #         "--ignore-missing-imports",
+  #         "--follow-imports=silent",
+  #       ]
+
+  - repo: https://github.com/fsouza/autoflake8
+    rev: v0.4.0
+    hooks:
+      - id: autoflake8
+
+  - repo: https://github.com/PyCQA/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args:
+          [
+            "--max-line-length=88",
+            "--extend-ignore=E203,W503,E0401",
+            "--max-complexity=10",
+          ]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+      - id: bandit
+        args: ["-x", "tests"]
+
+  - repo: https://github.com/dosisod/refurb
+    rev: v1.9.0
+    hooks:
+      - id: refurb
+
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    rev: v1.3.0
+    hooks:
+      - id: python-safety-dependencies-check
+        files: ./pyproject.toml
+
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.15.2
+    hooks:
+      - id: gitleaks
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v2.38.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]

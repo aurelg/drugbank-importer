@@ -1,0 +1,4 @@
+drugbank_id,partner_id,action
+DB00027,BE0001032,substrate
+DB00027,BE0001032,inhibitor
+DB00052,BE0001032,substrate
