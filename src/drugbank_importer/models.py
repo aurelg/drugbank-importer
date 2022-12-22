@@ -1,6 +1,17 @@
+from typing import Optional
+
+from pydantic import BaseModel
 from sqlalchemy import Boolean, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm.properties import ForeignKey
+
+
+class DescriptionModel(BaseModel):
+    id: Optional[int]
+    drugbank_id: str
+    drug_name: str
+    description: str
+    SMILES: str
 
 
 class Base(DeclarativeBase):

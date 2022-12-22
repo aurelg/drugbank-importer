@@ -19,6 +19,7 @@ from .models import (
     Base,
     Carrier,
     Description,
+    DescriptionModel,
     Drug,
     Enzyme,
     Partner,
@@ -197,10 +198,13 @@ def parse_drugbank_record(  # noqa: C901
         "description": child.find("description").text,
         "SMILES": drug_data["SMILES"],
     }
-    yield (
+
+    description_model = DescriptionModel(**description_data)
+    description_id = yield (
         RecordType.DESCRIPTION,
         {field: description_data[field] for field in HEADERS[RecordType.DESCRIPTION]},
     )
+    description_model_in_db = description_model.copy(update={"id": description_id})
 
     # Get targets, enzymes, transporters, carriers
 
@@ -251,7 +255,6 @@ def parse_drugbank_record(  # noqa: C901
                 for template_action in (template_actions or [""])
             ]
 
-            # yield interaction
             yield from [
                 (
                     record_type,
@@ -363,7 +366,17 @@ def serialize_to_sqlite(
     Base.metadata.create_all(engine)
     with Session(engine) as session:
         for record_type, record_value in business_entity_generator:
-            session.add(DBMODELS[record_type](**record_value))
+            if record_type == RecordType.DESCRIPTION:
+                sa_model = DBMODELS[record_type](**record_value)
+                session.add(sa_model)
+                session.flush()
+                # Send returns the next value (and is consequently at risk of throwing
+                # StopIteration): as the demo is for Description only, this
+                # record must me handled separately
+                following_record = business_entity_generator.send(sa_model.id)  # type: ignore
+                session.add(DBMODELS[following_record[0]](**following_record[1]))
+            else:
+                session.add(DBMODELS[record_type](**record_value))
 
         session.commit()
 
@@ -374,13 +387,24 @@ def get_drugbank_entities(
     """Create business_entity_generator, limited to `take_first` drugs."""
     partners_already_seen: Set[str] = set()
 
-    return (
-        drugbank_entity
-        for drugbank_record in islice(get_drugbank_records(file_path), take_first)
-        for drugbank_entity in parse_drugbank_record(
+    for drugbank_record in islice(get_drugbank_records(file_path), take_first):
+        drugbank_entity_generator = parse_drugbank_record(
             drugbank_record, partners_already_seen
         )
-    )
+
+        for drugbank_entity in drugbank_entity_generator:
+
+            if drugbank_entity[0] == RecordType.DESCRIPTION:
+                description_id = yield drugbank_entity
+                try:
+                    # Send returns the next value (and is consequently at risk of throwing
+                    # StopIteration): as the demo is for Description only, this
+                    # record must me handled separately
+                    yield drugbank_entity_generator.send(description_id)
+                except StopIteration:
+                    pass
+            else:
+                yield drugbank_entity
 
 
 def import_drugbank(
